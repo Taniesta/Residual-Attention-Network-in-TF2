@@ -1,16 +1,24 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
 \usepackage{multicol}
+\usepackage{geometry}
+\usepackage{xcolor}
 
 \title{Report for Residual Attention Network}
 \author{Feng Su(fs2658), Shengjie Sun(), Yiming Tan() }
 \date{December 2019}
+\setlength{\columnsep}{1cm}
+
+\geometry{margin=1in}
+
+
 
 
 
 \begin{document}
 \maketitle
 \begin{multicols}{2}
+
 
 \section{Abstract}
   “Residual Attention Network”, which is
@@ -36,7 +44,15 @@ Our model can easily contains over hundreds of layers which can outperform past 
 
 
 \section{Methodology of the Original Paper}
-Residual Attention Network is constructed by stacking multiple Attention Modules. Each Attention Module is divided into two branches: mask branch and trunk branch. The trunk branch performs feature processing and can be adapted to any state-of-the-art network structures
+Residual Attention Network is constructed by stacking multiple Attention Modules. Each Attention Module is divided into two branches: mask branch and trunk branch. The trunk branch performs feature processing and can be adapted to any state-of-the-art network structures.
+
+Instead of stacking Attention Modules, a
+simple approach would be using a single network branch
+to generate soft weight mask, similar to spatial transformer
+layer. In Attention Module, each trunk branch has its own
+mask branch to learn attention that is specialized for its features.
+\textcolor{red}{Insert ResiualNN here}
+
 
 \section{Result of the Original Paper}
 
