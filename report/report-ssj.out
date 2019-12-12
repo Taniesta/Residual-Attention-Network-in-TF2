@@ -1,0 +1,18 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Summary of the Original Paper}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Methodology of the Original Paper}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{Key Results of the Original Paper}{section.2}% 4
+\BOOKMARK [3][-]{subsubsection.2.2.1}{Residual structure benefits}{subsection.2.2}% 5
+\BOOKMARK [3][-]{subsubsection.2.2.2}{Attention structure benefits}{subsection.2.2}% 6
+\BOOKMARK [1][-]{section.3}{Methodology}{}% 7
+\BOOKMARK [2][-]{subsection.3.1}{Objectives and Technical Challenges}{section.3}% 8
+\BOOKMARK [2][-]{subsection.3.2}{Problem Formulation and Design}{section.3}% 9
+\BOOKMARK [1][-]{section.4}{Implementation}{}% 10
+\BOOKMARK [2][-]{subsection.4.1}{Deep Learning Network}{section.4}% 11
+\BOOKMARK [2][-]{subsection.4.2}{Software Design}{section.4}% 12
+\BOOKMARK [1][-]{section.5}{Results}{}% 13
+\BOOKMARK [2][-]{subsection.5.1}{Project Results}{section.5}% 14
+\BOOKMARK [2][-]{subsection.5.2}{Comparison of Results}{section.5}% 15
+\BOOKMARK [2][-]{subsection.5.3}{Discussion of Insights Gained}{section.5}% 16
+\BOOKMARK [1][-]{section.6}{Conclusion}{}% 17
+\BOOKMARK [1][-]{section.7}{Acknowledgement}{}% 18

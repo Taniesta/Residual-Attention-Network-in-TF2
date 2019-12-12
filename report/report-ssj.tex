@@ -1,126 +1,165 @@
 \documentclass{article}
-\usepackage[utf8]{inputenc}
-\usepackage{multicol}
-\usepackage{geometry}
-\usepackage{xcolor}
 
-\title{Report for Residual Attention Network}
-\author{Feng Su(fs2658), Shengjie Sun(), Yiming Tan() }
-\date{December 2019}
+\usepackage[final]{neurips_2019}
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{graphicx}
+\usepackage{subfig}
+\usepackage{natbib}
+\usepackage{float}
+\usepackage{algpseudocode,algorithm}
+
+\usepackage{multicol}
 \setlength{\columnsep}{1cm}
 
-\geometry{margin=1in}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
 
+\usepackage{caption}
+\captionsetup[table]{labelsep=space}
+\captionsetup[figure]{labelsep=space}
+\newcommand{\mycaption}[2]{\caption[#1]{\textbf{#1.} #2}}
 
+\title{Residual Attention Network for Image Classification}
 
-
+\author{%
+  Shengjie Sun \\
+  ss5593\\
+  Department of Statistics\\
+  Columbia University\\
+  New York, NY 10027 \\
+  \texttt{ss5593@columbia.edu} \\
+  % examples of more authors
+  \And
+  Yiming Tan \\
+  xx9999 \\
+  Department of Statistics\\
+  Columbia University\\
+  New York, NY 10027 \\
+  \texttt{xx9999@columbia.edu} \\
+  \And
+  Feng Su \\
+  xx9999 \\
+  Department of Statistics\\
+  Columbia University\\
+  New York, NY 10027 \\
+  \texttt{xx9999@columbia.edu}
+}
 
 \begin{document}
+
 \maketitle
+
 \begin{multicols}{2}
+\section*{Abstract}
+\textit{In this project, we reimplement a convolutional neural network structure called "Residual Attention Network" proposed by \citet{wang2017residual}. The great power of attention in machine translation has indicated by \citet{vaswani2017attention} and thus we are curious how the attention can influence the image classification task. During investigating the idea of residual attention, the main challenging is that the network is too flexible to choose a good hyper-parameters and the time and computing resources is limited for a network with such many residual blocks.}
 
 
-\section{Abstract}
-  “Residual Attention Network”, which is
-a CNN using attention mechanism which employs state-of-art feed forward network architecture in an end-to-end training fashion.
-The Residual Attention Network used in this report can be used to generate attention-aware features by consistently adding attention modules into the stacks.Inside every Attention
-Module, bottom-up top-down feed forward structure is used
-to unfold the feed forward and feedback attention process
-into a single feed forward process. When the process goes to deeper layers, attention-aware features from different modules are added up.
-+ Brief conclusion for result
+
 
 \section{Introduction}
+As the authors, \citet{vaswani2017attention}, of the paper mentioned, the residual mechanism in the image classification can serve to both focused location selection and the enhancement of the representations of focused objects. After the network structure like VGG given by \cite{simonyan2014very} and the improvement of computing resources, the newer networks are mostly deeper, as the structure proposed by this paper. Basically, residual attention network is a very deep convolutional neural network connected by residual unit mixed with soft mask, so called attention in this paper. 
 
-Based on past information and history, we found out that there are not many attention mechanisms have been applied to feed forward network structure which can help us to achieve the state-of-art of image classification.
+As for our project, first we want to implement the idea of this paper in tensorflow 2 and then compared our result and the result in the paper. Furthermore, we try to exam what should be a good "attention" for the image classification, the attention mentioned in this paper is actually a soft mask for a feature, which is quite different from the word "attention" used in the area of natural language processing. 
+\end{multicols}
 
-The Residual Attention Network is developed base don past attention mechanism and current advances by mixing them into a very "deep" architecture which composing multiple Attention Modules which generate attention-aware features. The attention-aware features from different modules change adaptively as layers going deeper
+\begin{figure}[!htb]  
+\centering  
+\includegraphics[width=6in]{imgs/attention_module_stage2.png}  
+\mycaption{Example architecture of the residual attention network.}{We use three hyper-parameters for the design of Attention Module: p, t and r. The hyper-parameter p denotes the number of pre-processing Residual Units before splitting into trunk branch and mask branch. t denotes the number of Residual Units in trunk branch. r denotes the number of Residual Units between adjacent pooling layer in the mask branch. In our experiments, we use the following hyper-parameters setting: {p = 1, t = 2, r = 1}. The number of channels in the soft mask Residual Unit and corresponding trunk branches is the same.}  
+\label{fig:attention_module_stage2}
+\end{figure}
 
+\newpage
+\begin{multicols}{2}
+There are several challenges and difficulties for this project. First of all, there are so many implementation details are not provided by the original paper. For example, there are so many residual units in one attention module but what is exactly the structure and parameters setting of the residual unit? Are all the residual units same? The second main challenging is that the model is relative huge considering the computer resources we have. Even thought it is feasible to train a model throughout several times, but the structure of attention module is such flexible, it is not very easy to find a good selection of hyper-parameters. 
 
-(1)Overall main structure:
-Residual Attention Network is constructed by stacking multiple Attention Modules. By using this kind of design, attention with different types can be better captured. However, stacking Attention Modules directly would lead to the obvious performance drop, in this case, we propose attention residual learning mechanism to optimize very deep Residual Attention Network with hundreds of layers. In addition, our model has a Bottom-up/Top-down structure as part of Attention modules to add soft weight . This structure can mimic bottom-up fast feed forward process and top-down attention feedback in a single feed forward process which allows us to develop an end-to-end trainable network with top-down attention. 
+Our solution to the first difficulty is to give a model with similar size of parameters. Even thought there are many details, the skeleton of the structure is clear. Therefore, we tried to give an implementation with similar size of parameters. The solution to the second one is that we tried as many acceleration methods as we can to squeeze our computation ability. And we also sacrificed some accuracy based on the real situation. 
+\section{Summary of the Original Paper}
+\subsection{Methodology of the Original Paper}
+The key idea of the whole paper lies on the structure of attention module and it can be roughly summarized by the following formula:
+\begin{eqnarray*}
+H_{i,c}(x)&=&(1+M_{i,c}(x))*T_{i, c}(x) \\
+&=&T_{i, c}(x) + M_{i,c}(x)*T_{i, c}(x)
+\label{eqn:attention_module}
+\end{eqnarray*}
+$T(x)$ is the common feed forward layers while $M(x)$ ranges from [0, 1] and serves as feature selectors. 
 
-(2)Incorporates with state-of-the-art deep network structures:
-Our model can easily contains over hundreds of layers which can outperform past many of state-of-the-art residual networks
+If we consider $M_{i,c}(x)*T_{i, c}(x)$ as $x$, it would be exactly the same as residual learning. But it is indeed based on attention structure, and thus called residual attention network.
 
+\begin{figure}[H] 
+\includegraphics[width=3in]{imgs/receptive_field.png}  
+\mycaption{Structure of Attention Module.}{$T(x)$ indicates the features generated by deep convolutional networks. $M(x)$ is the mask branche which work as feature selectors that enhance good features and suppress noises from trunk features.}  
+\label{fig:receptive_field}
+\end{figure}
 
-\section{Methodology of the Original Paper}
-Residual Attention Network is constructed by stacking multiple Attention Modules. Each Attention Module is divided into two branches: mask branch and trunk branch. The trunk branch performs feature processing and can be adapted to any state-of-the-art network structures.
+\subsection{Key Results of the Original Paper}
+\subsubsection{Residual structure benefits}
+This paper argues that utilizing residual structure enables the stacking of more attention modules as shown in Figure \ref{fig:cifar10_residual}. This is not surprising us too much as this is just why residual learning, i.e. skipping connection, is so popular and useful.
+\begin{figure}[H] 
+\includegraphics[width=3in]{imgs/cifar10_residual.png}  
+\mycaption{Classification error (\%) on CIAFR-10.}{The networks trained using attention residual learning technique consistently outperform the networks trained with baseline method. The performance increases with the number of attention module when applying attention residual learning. In contrast, the performance of networks trained with “naive attention learning” method suffers obvious degradation.}  
+\label{fig:cifar10_residual}
+\end{figure}
+The Figure \ref{fig:cifar10_stages} proved above argument in details, we can see that residual attention model has similar relative mean response to ResNet-164.
+\begin{figure}[H] 
+\includegraphics[width=3in]{imgs/cifar10_stages.png}  
+\mycaption{The mean absolute response of output features in each stage.}{The response generated by the network trained using naive attention learning quickly vanishes in the stage 2 after four attention modules compared with network trained using attention residual learning.}  
+\label{fig:cifar10_stages}
+\end{figure}
 
-Instead of stacking Attention Modules, a
-simple approach would be using a single network branch
-to generate soft weight mask, similar to spatial transformer
-layer. In Attention Module, each trunk branch has its own
-mask branch to learn attention that is specialized for its features.
-\textcolor{red}{Insert ResiualNN here}
+\subsubsection{Attention structure benefits}
+The paper shows that their model outperforms the state of art models. On the dataset CIFAR10 and CIFAR100, the attention residual learning scheme can effectively reduce the number of parameters in the network while enhancing the accuracy of the classification.
 
-
-\section{Result of the Original Paper}
+\begin{figure}[H] 
+\includegraphics[width=3in]{imgs/cifar10_modes}  
+\mycaption{Comparisons with state-of-the-art methods on CIFAR-10/100.}{}
+\label{fig:cifar10_modes}
+\end{figure}
 
 \section{Methodology}
+Basically, the model is constructed by attention modules shown in Figure \ref{fig:attention_module_stage2}. One attention module has two branches: trunk branch and soft mask branch. At each stage, there could be several attention modules and in Figure \ref{fig:attention_module_stage2}, each stage contains exactly one module. More specifically, in the soft mask branch, there are different number of skip connections between down sampling and up sampling layers. 
 
-\section{Objective and Technical Challenges}
+The paper did not provide the details of the residual unit and up or down sampling layers. But for the reimplementation, these details are crucial because we can not get the ImageNet dataset but for CIFAR10 or even CIFAR100, it is very easy to overfit. 
 
+In our project, we tried to build so called Attention56 for CIFAR10, i.e. in each stage, there is only one attention module. The soft mask branch has two skip connections at stage 1, one skip connection at stage 2 and one at the last stage which is exactly same to to the Figure \ref{fig:attention_module_stage2}. We constructed two kind of residual unit. One required exactly the same identity mapping for the skip connection while the other allows the down sampling.  
+ 
+\subsection{Objectives and Technical Challenges}
+The main object is to get the accuracy as close as the one provided in the paper. But as mentioned several times, the details is important but hidden in this paper, so lots of experiments required but the time and computing resources limited. 
 
-\section{Problem Formulation and Design}
-Give the detailed, one-to-one correspondence description of your design to attach/solve the problem and to achieve the objectives and the goal of the project:
-Use engineering language and mathematical formulation;
-Provide system drawings, block diagrams, and/or circuit schematics for your software or hardware design, as applicable to your project; 
-Include flow charts and pseudo code descriptions for the step-by-step discussion of your software design.
+The other challenge is the coding writing, it is not difficult to build the overall structure for a specific model, say Attention56. But it is super time consuming to adjust the hyper-parameters. It is quite clear there are lots of sampling steps and skip connections. Therefore the dimension and the shape of images/tensors become a little bit annoying to keep consistent. Besides, the different model requires different attention model, at the end, the dimensions become chaos and requires lot of time to adjust. So, if you want to give codes which can reused for many models, it is somehow difficult to design. If not, there will be plenty of repeating codes that fixed the inputs and outputs dimension for each layers. 
 
+The last but not least is how to prevent over-fitting. The learning ability of these model are high and over-fitting is common. Even there are so many skip connections, the over-fitting is still obvious. Finding a good way to prevent it for this kind of model structure is difficult for us. 
+
+\subsection{Problem Formulation and Design}
 
 \section{Implementation}
-One sentence to describe the organization of this section, then provide detailed discussion on your implementation. 
-
-\section{Deep Learning Network}
- Provide the following descriptions and discussions: 
-Architectural block diagram(s).  
-Training algorithm details
-Flowchart(s)
-Data used
-
-
-\section{Software Design}
- Provide the following description and discussion: 
-Flow chart or flow charts, very often you should provide one top level flow chart, then additional flow charts for detailed lower level implementations.  
-Algorithm, e.g., description of the step by step implementation.  
-Pseudo code for each section of the implementation. 
-
+\subsection{Deep Learning Network}
+\subsection{Software Design}
 
 \section{Results}
-
-\section{Project Results}
-Provide detailed 
-Description of results
-Figures, plots
-Testing, verification
-
-
-\section{Comparison of Result}
- Provide detailed comparison between results of the original paper and the students’ project
-Figure, plots  showing differences in things such as training length/time, training/verification error, test error, other.
-
-
-\section{Discussion of Insights Gained}
-Provide detailed discussion, regardless of the actual results: why are your results different, did you used smaller dataset, did you use different hyper-parameters, number of epochs different?
-
+\subsection{Project Results}
+\subsection{Comparison of Results}
+\subsection{Discussion of Insights Gained}
 
 \section{Conclusion}
-Provide summary of this project, briefly review the statements made in the abstract, in particular, if the enumerated objectives and goal are achieved. Emphasize and highlight the lessons learned, point out the direction for further improvement if needed. 
-
 \section{Acknowledgement}
-Provide acknowledgement if needed, such as support, help, or assistance from someone. These support, help, assistance are crucial.
-
-\section{Reference}
-Include all references - papers, code, links, books.
-[1] Link to your bibucket or github
-[2] H. Li,  “Author Guidelines for CMPE 146/242 Project Report”, Lecture Notes of CMPE 146/242, Computer Engineering Department, College of Engineering, San Jose State University, March 6, 2006, pp. 1.
-[12] ...
-
-
-
-
-
 
 \end{multicols}
-\end{document}
 
+\newpage
+
+\bibliography{citations}
+\bibliographystyle{plainnat}
+\end{document}
