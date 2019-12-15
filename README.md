@@ -12,9 +12,12 @@
 - `ref/`: the folder for the reference papers
 - `report/`: the folder for the report writing
 - `outputs/`: the folder for the outputs during the running time
+  
   - `outputs/checkpoints/`: the folder for the model saving
   - `outputs/images/`: the folder for the images generated if any
   - `outputs/logs/`: the folder for the tensorboard
+  
+  ATTENTION: There are limitation of the file size up to 100M, thus the mode with best accuracy can not be uploaded!!
 - `utils/`: the folder for the $\texttt{classes}$ and $\texttt{functions}$ defined for the notebook file
 - `residual-attention.ipynb`: the main UI file containing instructors, comments, results shown both by running histories and figures 
 

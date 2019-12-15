@@ -168,7 +168,13 @@ In order to check whether the residual structure can enhance the number of stack
 \section{Implementation}
 
 \subsection{Deep Learning Network}
-The architectural diagrams are Figure \ref{fig:architect} and Figure \ref{fig:attention_module_stage2}. In the following part, we will give details of how the mask and truck brunches are implemented. 
+The architectural diagrams are Figure \ref{fig:architect} and Figure \ref{fig:attention_module_stage2}. 
+As for the training details, it is shown in Figure \ref{fig:training flowchart} in Appendix. The general parameters are \textbf{epoch and batch}: a maximum of 300 epochs with a batch size of 128 in each epoch is used in training. If the early stopping condition is not satisfied, the model would be trained in at most 300 epochs. \textbf{Learning rate and decay}: a decaying learning rate with patience is used. The learning rate is .001, if the validation accuracy can not be improved in 10 epochs, a factor of .6 will be multiplied to the learning rate. \textbf{Data Augmentation}: for data augmentation, horizontal and vertical flipping on the original pictures is done.
+\textbf{Early stopping}: early stopping is introduced here by checking the validation accuracy of the model. If the best validation accuracy could not be improved in 20 epochs, the training would be stopped.
+
+
+
+In the following part, we will give details of how the mask and truck brunches are implemented. 
 
 \textbf{Mask Branch Implementation}. The algorithm design of Mask Branch is shown in Figure \ref{fig:mask_flowchart}. The input of this branch first goes through a loop of down-sampling units until all the down-sampling units are done. After each down-sampling unit, the output is put into an identity list for later use in skip connections. After all the up-sampling units are done, a similar loop consisting of corresponding up-sampling units is done until all the up-sampling units are finished. Before each up-sampling unit, the corresponding identity value in the identity list is added to the output to establish the skip connections between sampling layers. After all the up-sampling units are completed, the output information then go through two convolutional layers and a sigmoid activation function before it is returned as the output of this branch.
 \begin{figure}[H] 
@@ -305,12 +311,31 @@ In the future, we tried to release the over-fitting further and exam the differe
 
 \subsection{Individual Student Contributions}
 \subsubsection*{Shengjie Sun (ss5593)}
-\textbf{Fraction:} \\
+{Fraction:} 
 $5/12$
+{What I did:} \\
+Code the \texttt{residual.py}, \texttt{attention\_module.py}, \texttt{models.py}, \texttt{residual\_attention.ipynb}. \\
+Report writing, model training and hyper-parameter tuning.
 
-\textbf{What I did:} \\
-Code the \texttt{residual.py}, \texttt{attention\_module.py}, \texttt{residual\_attention.ipynb} part of \texttt{models.py}, report writing, model training and hyper-parameter tuning.
+\subsubsection*{Yiming Tan (yt2658)}
+{Fraction:} 
+$4/12$
+{What I did:} \\
+Code the \texttt{attention\_module.py} and \texttt{models.py}. \\
+Report writing, model training and hyper-parameter tuning.
+
+\subsubsection*{Feng Su (fs3658)}
+{Fraction:} 
+$3/12$
+{What I did:} \\
+Report writing.
+
+\subsection{Additional Diagrams}
+\begin{figure}[H] 
+\includegraphics[width=3in]{imgs/training_flowchart.png}  \mycaption{Training Details}{}  
+\label{fig:training flowchart}\end{figure}
 \end{multicols}
+
 
 \newpage
 
