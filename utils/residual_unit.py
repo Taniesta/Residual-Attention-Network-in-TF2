@@ -18,20 +18,26 @@ class ResidualUnit(layers.Layer):
     def __init__(self, filter, stride=1):
         super().__init__()
         
-        self.conv1 = layers.Conv2D(filter*2, (3, 3), strides=stride, padding='same')
         self.bn1 = layers.BatchNormalization()
+        self.conv1 = layers.Conv2D(int(filter/4), (1, 1), strides=stride, padding='same')
         
-        self.conv2 = layers.Conv2D(filter, (3, 3), strides=1, padding='same')
         self.bn2 = layers.BatchNormalization()
+        self.conv2 = layers.Conv2D(int(filter/4), (3, 3), strides=1, padding='same')
+
+        self.bn3 = layers.BatchNormalization()
+        self.conv3 = layers.Conv2D(filter, (1, 1), strides=1, padding='same')
         
-        self.downsample = layers.Conv2D(filter, (1, 1), strides=stride)
+        if stride == 1:
+            self.downsample = lambda x: x
+        else:
+            self.downsample = layers.Conv2D(filter, (1, 1), strides=stride, padding='same')
         
     def call(self, inputs, training=None):
         
-        out = tf.nn.relu(self.bn1(self.conv1(inputs)))
-        out = tf.nn.relu(self.bn2(self.conv2(out)))
+        out = self.conv1(self.bn1(tf.nn.relu(inputs)))
+        out = self.conv2(self.bn2(tf.nn.relu(out)))
+        out = self.conv3(self.bn3(tf.nn.relu(out)))
         
-        # this is not the identity exactly, 1 by 1 convolution is used on channels dimension
         identity = self.downsample(inputs)
 
         output = layers.add([out, identity])
@@ -57,24 +63,24 @@ class ResidualUnitIdentity(layers.Layer):
         self.filter = filter
         self.stride = stride
 
-        self.conv1 = layers.Conv2D(filter*2, (3, 3), strides=stride, padding='same')
+        self.conv1 = layers.Conv2D(filter, (1, 1), strides=stride, padding='same')
         self.bn1 = layers.BatchNormalization()
         
         self.conv2 = layers.Conv2D(filter, (3, 3), strides=1, padding='same')
         self.bn2 = layers.BatchNormalization()
         
-        if stride != 1:
+        if stride == 1:
+            self.downsample = lambda x:x
+        else:
             self.downsample = Sequential()
             self.downsample.add(layers.Conv2D(filter, (1, 1), strides=stride))
-        else:
-            self.downsample = lambda x:x
         
     def call(self, inputs, training=None):
         if self.stride == 1:
             assert inputs.shape[-1] == self.filter
 
-        out = tf.nn.relu(self.bn1(self.conv1(inputs)))
-        out = tf.nn.relu(self.bn2(self.conv2(out)))
+        out = self.conv1(tf.nn.relu(self.bn1(inputs)))
+        out = self.conv2(tf.nn.relu(self.bn2(out)))
         
         # this is identity exactly if stride = 1
         identity = self.downsample(inputs)
@@ -154,4 +160,40 @@ class UpSampleUnit(layers.Layer):
             output = residual_unit(output)
         output = self.interpolation(output)
 
+        return output
+
+
+class ResidualUnitBetween(layers.Layer):
+
+    """
+    This is class for creating residual unit that connect the attention modules
+    Inputs:
+        inputs: tf.Tensor of shape (batch, height, width, channels)
+    Arguments:
+        filter: Integer, the dimensionality of the output space(i.e. the number of output filter in the convolution).
+        stride: Integer, specifying the strides of the first convolution layer along the height and width.
+    Return:
+        output: tf.Tensor of shape (batch, height/stride, width/stride, filter*4). 
+    """
+
+    def __init__(self, filter, stride=2):
+        super().__init__()
+        
+        self.bn1 = layers.BatchNormalization()
+        self.conv1 = layers.Conv2D(filter, (1, 1), strides=1, padding='same')
+        
+        self.bn2 = layers.BatchNormalization()
+        self.conv2 = layers.Conv2D(filter, (3, 3), strides=1, padding='same')
+        
+        self.conv3 = layers.Conv2D(filter*4, (1, 1), strides=stride, padding='same')
+        self.downsample = layers.Conv2D(filter*4, (1, 1), strides=stride, padding='same')
+        
+    def call(self, inputs, training=None):
+        
+        output = self.conv1(tf.nn.relu(self.bn1(inputs)))
+        output = self.conv2(tf.nn.relu(self.bn2(output)))
+
+        identity = self.downsample(inputs)
+        output = self.conv3(output)+identity
+        
         return output

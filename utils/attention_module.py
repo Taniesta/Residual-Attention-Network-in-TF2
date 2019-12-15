@@ -79,7 +79,7 @@ class MaskBranch(layers.Layer):
                                                                             stride=up[s-2-i]['strides_residual'][-1])
 
         self.conv1 = layers.Conv2D(filter, (1, 1), padding='same')
-        self.conv2 = layers.Conv2D(filter, (1, 1), padding='same')
+        # self.conv2 = layers.Conv2D(filter, (1, 1), padding='same')
 
     def call(self, inputs, training=None):
         
@@ -97,7 +97,7 @@ class MaskBranch(layers.Layer):
             output = self.upsampleunits["upsample_unit_%d" % i](output)
         
         output = self.conv1(output)
-        output = self.conv2(output)
+        # output = self.conv2(output)
         
         mask = tf.math.sigmoid(output)
         
@@ -139,7 +139,7 @@ class AttentionModule(Model):
         self.after = Sequential()
         for (filter, stride) in zip(filter_side, stride_side):
             self.before.add(layers.Conv2D(filter, kernel_size=(3, 3), strides=1, padding='same'))
-            self.before.add(layers.Conv2D(filter, kernel_size=(3, 3), strides=stride, padding='same'))
+            self.before.add(layers.Conv2D(filter, kernel_size=(1, 1), strides=stride, padding='same'))
 
         # Trunk Branch
         self.trunk = TrunkBranch(filters=filters_trunk, strides=strides_trunk, t = t)

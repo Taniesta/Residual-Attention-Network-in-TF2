@@ -18,7 +18,7 @@
 \providecommand\HyField@AuxAddToCoFields[2]{}
 \citation{wang2017residual}
 \citation{vaswani2017attention}
-\citation{vaswani2017attention}
+\citation{wang2017residual}
 \citation{simonyan2014very}
 \@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Example architecture of the residual attention network.}}{1}{figure.caption.3}\protected@file@percent }
@@ -36,20 +36,38 @@
 \@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces The mean absolute response of output features in each stage.}}{2}{figure.caption.6}\protected@file@percent }
 \newlabel{fig:cifar10_stages}{{4}{2}{The mean absolute response of output features in each stage}{figure.caption.6}{}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.2}Attention structure benefits}{2}{subsubsection.2.2.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Comparisons with state-of-the-art methods on CIFAR-10/100.}}{3}{figure.caption.7}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Comparisons with state-of-the-art methods on CIFAR-10/100}}{3}{figure.caption.7}\protected@file@percent }
 \newlabel{fig:cifar10_modes}{{5}{3}{Comparisons with state-of-the-art methods on CIFAR-10/100}{figure.caption.7}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {3}Methodology}{3}{section.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Objectives and Technical Challenges}{3}{subsection.3.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Problem Formulation and Design}{3}{subsection.3.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces The architecture of the whole model}}{3}{figure.caption.8}\protected@file@percent }
+\newlabel{fig:architect}{{6}{3}{The architecture of the whole model}{figure.caption.8}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {4}Implementation}{3}{section.4}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Deep Learning Network}{3}{subsection.4.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Software Design}{3}{subsection.4.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5}Results}{3}{section.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Project Results}{3}{subsection.5.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Comparison of Results}{3}{subsection.5.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Discussion of Insights Gained}{3}{subsection.5.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusion}{3}{section.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {7}Acknowledgement}{3}{section.7}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Mask Branch in an Attention Module}}{4}{figure.caption.9}\protected@file@percent }
+\newlabel{fig:mask_flowchart}{{7}{4}{Mask Branch in an Attention Module}{figure.caption.9}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Trunk Branch in an Attention Module}}{4}{figure.caption.10}\protected@file@percent }
+\newlabel{fig:trunk_flowchart}{{8}{4}{Trunk Branch in an Attention Module}{figure.caption.10}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Software Design}{4}{subsection.4.2}\protected@file@percent }
+\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces Class of the Residual Attention Model\relax }}{4}{figure.caption.11}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}Results}{5}{section.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Project Results}{5}{subsection.5.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces An Example of training and Validation history of Accuracy}}{5}{figure.caption.12}\protected@file@percent }
+\newlabel{fig:accuracy}{{9}{5}{An Example of training and Validation history of Accuracy}{figure.caption.12}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces The weights in the last layers of the three attention module}}{5}{figure.caption.13}\protected@file@percent }
+\newlabel{fig:hist}{{10}{5}{The weights in the last layers of the three attention module}{figure.caption.13}{}}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {Stage 1}}}{5}{subfigure.10.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {Stage 2}}}{5}{subfigure.10.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(c)}{\ignorespaces {Stage 3}}}{5}{subfigure.10.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Comparison of Results}{5}{subsection.5.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces An Example of training and Validation history of Loss}}{5}{figure.caption.14}\protected@file@percent }
+\newlabel{fig:loss}{{11}{5}{An Example of training and Validation history of Loss}{figure.caption.14}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Discussion of Insights Gained}{5}{subsection.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusion}{5}{section.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7}Appendix}{6}{section.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}Github Repository}{6}{subsection.7.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2}Individual Student Contributions}{6}{subsection.7.2}\protected@file@percent }
 \bibdata{citations}
 \bibcite{simonyan2014very}{{1}{2014}{{Simonyan and Zisserman}}{{}}}
 \bibcite{vaswani2017attention}{{2}{2017}{{Vaswani et~al.}}{{Vaswani, Shazeer, Parmar, Uszkoreit, Jones, Gomez, Kaiser, and Polosukhin}}}
